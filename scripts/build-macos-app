@@ -1,0 +1,38 @@
+#!/bin/bash
+set -euo pipefail
+project_root="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd)"
+app_path="$project_root/dist/Audio Agent.app"
+module_cache="$project_root/.data/swift-module-cache"
+mkdir -p "$app_path/Contents/MacOS" "$app_path/Contents/Resources" "$module_cache"
+
+/usr/bin/xcrun swiftc -swift-version 5 -O -target arm64-apple-macosx13.0 \
+  -module-cache-path "$module_cache" \
+  "$project_root"/macos/AudioAgentBar/*.swift \
+  -o "$app_path/Contents/MacOS/AudioAgentBar"
+
+"$project_root/.venv/bin/python" - "$app_path" "$project_root" <<'PY'
+import plistlib, sys
+from pathlib import Path
+app, project = map(Path, sys.argv[1:])
+info = {
+    'CFBundleName': 'Audio Agent',
+    'CFBundleDisplayName': 'Audio Agent',
+    'CFBundleExecutable': 'AudioAgentBar',
+    'CFBundleIdentifier': 'local.audio-agent.menubar',
+    'CFBundlePackageType': 'APPL',
+    'CFBundleShortVersionString': '0.1.4',
+    'CFBundleVersion': '5',
+    'LSMinimumSystemVersion': '13.0',
+    'LSUIElement': True,
+    'NSHighResolutionCapable': True,
+    'NSMicrophoneUsageDescription': '仅在你主动开始监听后采集声音，录音和转写均在本机处理。查看或复制文字不会启用麦克风。',
+    'NSAppTransportSecurity': {'NSAllowsLocalNetworking': True},
+    'AudioAgentProjectPath': str(project),
+    'AudioAgentPort': 8767,
+}
+with (app / 'Contents/Info.plist').open('wb') as output:
+    plistlib.dump(info, output)
+PY
+/usr/bin/codesign --force --sign - "$app_path"
+/usr/bin/plutil -lint "$app_path/Contents/Info.plist"
+printf '%s\n' "$app_path"

@@ -1,0 +1,25 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "local-audio-agent"
+version = "0.1.0"
+description = "Local audio buffer and on-demand transcription for macOS"
+requires-python = ">=3.11"
+dependencies = ["mcp>=1.26,<2", "tomlkit>=0.13,<1"]
+
+[project.optional-dependencies]
+asr = ["pywhispercpp>=1.4,<2"]
+speech = ["onnxruntime>=1.20,<2", "sherpa-onnx>=1.12,<3"]
+dev = ["pytest>=8,<10", "pytest-asyncio>=1,<2"]
+
+[project.scripts]
+audio-agent = "audio_agent.cli:main"
+
+[tool.hatch.build.targets.wheel]
+packages = ["audio_agent"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+asyncio_mode = "auto"

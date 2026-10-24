@@ -1,0 +1,196 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <meta name="theme-color" content="#14272c">
+  <title>转写文档 · Audio Agent</title>
+  <link rel="stylesheet" href="/app.css">
+  <script src="/document.js" defer></script>
+  <script src="/agent-setup.js" defer></script>
+  <script src="/app.js" defer></script>
+</head>
+<body>
+  <svg class="icon-definitions" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <symbol id="i-wave" viewBox="0 0 24 24"><path d="M4 10v4M8 6v12M12 3v18M16 7v10M20 10v4"/></symbol>
+      <symbol id="i-library" viewBox="0 0 24 24"><rect x="4" y="4" width="6" height="7" rx="1.5"/><rect x="14" y="4" width="6" height="7" rx="1.5"/><rect x="4" y="15" width="6" height="5" rx="1.5"/><rect x="14" y="15" width="6" height="5" rx="1.5"/></symbol>
+      <symbol id="i-text" viewBox="0 0 24 24"><path d="M8 3h8l4 4v13a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h3Z"/><path d="M15 3v5h5M8 12h8M8 16h6"/></symbol>
+      <symbol id="i-lock" viewBox="0 0 24 24"><rect x="5" y="10" width="14" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3M12 14v3"/></symbol>
+      <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+      <symbol id="i-upload" viewBox="0 0 24 24"><path d="M12 15V3m-5 5 5-5 5 5M4 15v4a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-4"/></symbol>
+      <symbol id="i-search" viewBox="0 0 24 24"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 4.5 4.5"/></symbol>
+      <symbol id="i-chevron" viewBox="0 0 24 24"><path d="m9 5 7 7-7 7"/></symbol>
+      <symbol id="i-headphones" viewBox="0 0 24 24"><path d="M4 14v-3a8 8 0 0 1 16 0v3"/><rect x="3" y="12" width="4" height="9" rx="2"/><rect x="17" y="12" width="4" height="9" rx="2"/></symbol>
+      <symbol id="i-refresh" viewBox="0 0 24 24"><path d="M20 7v5h-5M4 17v-5h5"/><path d="M6.5 5.5A8 8 0 0 1 20 12M4 12a8 8 0 0 0 13.5 6.5"/></symbol>
+      <symbol id="i-copy" viewBox="0 0 24 24"><rect x="8" y="8" width="12" height="13" rx="2"/><path d="M16 8V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h3"/></symbol>
+      <symbol id="i-download" viewBox="0 0 24 24"><path d="M12 3v12m-5-5 5 5 5-5M4 16v3a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-3"/></symbol>
+      <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></symbol>
+      <symbol id="i-check" viewBox="0 0 24 24"><path d="m5 12 4 4L19 6"/></symbol>
+      <symbol id="i-close" viewBox="0 0 24 24"><path d="m6 6 12 12M18 6 6 18"/></symbol>
+      <symbol id="i-alert" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v6M12 17h.01"/></symbol>
+      <symbol id="i-device" viewBox="0 0 24 24"><rect x="4" y="3" width="16" height="13" rx="2"/><path d="M2 21h20M9 16l-1 5m7-5 1 5"/></symbol>
+      <symbol id="i-play" viewBox="0 0 24 24"><path d="m9 5 11 7-11 7V5Z"/></symbol>
+      <symbol id="i-mic" viewBox="0 0 24 24"><rect x="8" y="2" width="8" height="13" rx="4"/><path d="M5 10v2a7 7 0 0 0 14 0v-2M12 19v3M8 22h8"/></symbol>
+      <symbol id="i-people" viewBox="0 0 24 24"><circle cx="9" cy="7" r="3"/><path d="M3 21v-2a6 6 0 0 1 12 0v2M16 4a3 3 0 0 1 0 6m2 4a5 5 0 0 1 3 5v2"/></symbol>
+      <symbol id="i-folder" viewBox="0 0 24 24"><path d="M3 7V5a2 2 0 0 1 2-2h5l3 3h6a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7Z"/></symbol>
+      <symbol id="i-plug" viewBox="0 0 24 24"><path d="M8 2v5m8-5v5M5 7h14v3a7 7 0 0 1-14 0V7Zm7 10v5"/></symbol>
+      <symbol id="i-stop" viewBox="0 0 24 24"><rect x="6" y="6" width="12" height="12" rx="2"/></symbol>
+    </defs>
+  </svg>
+  <a class="skip-link" href="#document-panel">跳到转写文档</a>
+  <div class="app-shell">
+    <aside class="sidebar" aria-label="工作空间导航">
+      <a href="/" class="brand" aria-label="Audio Agent 首页"><span class="brand-mark"><svg class="icon"><use href="#i-wave"/></svg></span><span><strong>Audio Agent</strong><small>本地语音工作台</small></span></a>
+      <div class="sidebar-section-label">工作空间</div>
+      <nav class="sidebar-nav">
+        <button class="nav-item active" id="nav-document" aria-current="page"><svg class="icon"><use href="#i-text"/></svg><span>转写文档</span></button>
+        <button class="nav-item" id="nav-people"><svg class="icon"><use href="#i-people"/></svg><span>声纹与人物</span></button>
+        <button class="nav-item" data-view="clips"><svg class="icon"><use href="#i-library"/></svg><span>录音文件</span><span class="nav-count" id="nav-clip-count">—</span></button>
+        <button class="nav-item" data-view="transcripts"><svg class="icon"><use href="#i-text"/></svg><span>转写记录</span><span class="nav-count" id="nav-transcript-count">—</span></button>
+        <button class="nav-item" id="nav-storage"><svg class="icon"><use href="#i-folder"/></svg><span>存储位置</span></button>
+        <button class="nav-item" id="nav-mcp"><svg class="icon"><use href="#i-plug"/></svg><span>MCP 接入</span></button>
+      </nav>
+      <div class="sidebar-device">
+        <div class="sidebar-section-label">设备状态</div>
+        <div class="device-heading"><svg class="icon"><use href="#i-device"/></svg><span>当前 Mac</span></div>
+        <div class="capture-state" id="capture-state"><span class="status-dot muted"></span><span>正在连接…</span></div>
+        <p id="capture-detail">正在读取本地录音状态</p>
+      </div>
+      <div class="sidebar-bottom">
+        <div class="model-status"><span class="model-indicator" id="model-indicator"></span><div><span class="model-title">本地识别引擎</span><strong id="model-name">正在检查模型</strong></div></div>
+        <div class="privacy-note"><svg class="icon"><use href="#i-lock"/></svg><span>声音与文字，留在你的设备</span></div>
+      </div>
+    </aside>
+
+    <main id="main" class="main-content document-workspace">
+      <div class="topbar"><div class="breadcrumb">工作空间 <span>/</span> <strong>转写文档</strong></div><div class="connection" id="connection"><span class="status-dot muted"></span><span>连接中</span></div></div>
+      <header class="page-heading document-page-heading"><div><h1 id="page-title">转写文档</h1></div><span class="document-local-note"><svg class="icon"><use href="#i-lock"/></svg>仅在本机保存</span></header>
+      <input type="file" id="file-input" accept=".wav,audio/wav,audio/x-wav" multiple hidden>
+<div id="connection-error" class="notice error-notice" hidden role="alert"><svg class="icon"><use href="#i-alert"/></svg><span id="connection-error-text">无法连接本地服务。</span><button id="reconnect-button" class="text-button">重新连接</button></div>
+      <section class="live-card live-card-compact" id="live-card" aria-label="监听与自动转写">
+        <div class="live-heading"><div class="live-title"><span class="live-mic-icon"><svg class="icon"><use href="#i-mic"/></svg></span><div><h2>监听与自动转写</h2></div></div><div class="live-indicators"><span id="live-status" class="live-state"><span class="status-dot muted"></span><span>尚未开始</span></span><span class="live-timer" id="live-timer">00:00</span></div><div class="live-primary-actions"><button class="button primary live-start-button" id="live-start" disabled><svg class="icon"><use href="#i-mic"/></svg><span>开始监听并自动转写</span></button><button class="button live-stop-button" id="live-stop" hidden><svg class="icon"><use href="#i-stop"/></svg><span>停止监听</span></button></div></div>
+        <div class="live-overview"><span id="live-progress">尚未监听</span><p class="live-footnote" id="live-footnote">静音不会新建录音或转写任务。声音与文字均保存在本机。</p></div>
+<div class="live-error" id="live-error" role="alert" hidden></div>
+        <details id="recording-settings" class="recording-settings">
+          <summary><span><svg class="icon"><use href="#i-device"/></svg>录音设置</span><span class="settings-summary-note">麦克风、语音检测与声音筛选</span><svg class="icon disclosure-arrow"><use href="#i-chevron"/></svg></summary>
+          <div class="recording-settings-content">
+<div class="live-controls"><label class="live-device-field"><span>录音设备</span><div class="live-device-input"><select id="live-device" aria-label="选择录音麦克风" disabled><option value="">正在读取麦克风…</option></select><button id="refresh-devices" class="icon-button" aria-label="刷新麦克风列表" title="刷新麦克风列表"><svg class="icon"><use href="#i-refresh"/></svg></button></div></label><label class="live-language-field"><span>识别语言</span><select id="live-language"><option value="zh">中文</option><option value="auto">自动识别</option><option value="en">English</option></select></label></div>
+<div class="vad-control"><label><input type="checkbox" id="vad-enabled" checked><span>启用语音检测（VAD）</span></label><span id="vad-state" role="status">正在检查本地语音模型…</span><p>关闭后仅使用声音门槛；语音检测也不能判断谁正在与你对话。</p></div>
+        <section class="gate-settings" aria-label="声音触发门槛">
+          <div class="gate-heading"><div><h3>声音筛选 · 触发门槛</h3><p id="gate-applied">正在读取当前设置…</p></div><output id="gate-value" for="gate-range">−44.4 <span>dBFS</span></output></div>
+          <div class="gate-adjust"><div class="gate-slider-wrap"><input type="range" id="gate-range" min="-60" max="-18" step="0.1" value="-44.4" aria-label="声音触发门槛，单位 dBFS" aria-describedby="gate-scale-labels gate-limitation" disabled><div class="gate-scale-labels" id="gate-scale-labels"><span>更灵敏 · 容易录入背景声</span><span>更保守 · 可能漏掉轻声</span></div></div><button class="button small" id="gate-save" disabled>保存门槛</button></div>
+          <div class="gate-presets" role="group" aria-label="门槛预设起点"><button data-gate-db="-50" disabled><span>轻声敏感</span><small>−50 dBFS</small></button><button data-gate-db="-44.4" disabled><span>默认</span><small>−44.4 dBFS</small></button><button data-gate-db="-32" disabled><span>近讲保守</span><small>−32 dBFS</small></button></div>
+          <div class="gate-feedback-row"><span id="gate-feedback" role="status" aria-live="polite">正在读取门槛…</span><span>预设仅供试调，不代表距离或说话人过滤。</span></div>
+          <p class="gate-error" id="gate-error" role="alert" hidden></p>
+          <p class="gate-limitation" id="gate-limitation">门槛只能按声音大小过滤；电视或同事说话足够响时仍会触发，无法判断谁正在与你对话。</p>
+        </section>
+<div class="live-signal signal-panel" id="live-signal" hidden><div class="signal-values"><span>近 1 秒 RMS<strong id="signal-average">— dBFS</strong></span><span id="signal-peak-wrapper" hidden>近 1 秒最大 20ms RMS<strong id="signal-peak">— dBFS</strong></span><span id="live-signal-label"></span></div><div class="signal-scale" aria-hidden="true"><span class="signal-average-bar" id="signal-average-bar"></span><span class="signal-peak-bar" id="signal-peak-bar" hidden></span><span class="signal-threshold-marker" id="signal-threshold-marker"></span></div><div class="signal-scale-labels"><span>−80 dBFS</span><span id="signal-threshold-label">当前生效门槛</span><span>0 dBFS</span></div><p>触发依据是每 20ms 的短时音量，1 秒平均值仅作参考。</p><meter class="sr-only" id="live-audio-level" min="-80" max="0" value="-80" aria-label="近一秒麦克风输入 RMS，单位 dBFS"></meter></div>
+
+          </div>
+        </details>
+        <div class="live-transcript-section legacy-live-feed" hidden aria-hidden="true"><div class="live-feed" id="live-feed"><p class="live-feed-empty" id="live-feed-empty"></p></div></div>
+      </section>
+      <div class="people-entry"><button class="button" id="open-people"><svg class="icon"><use href="#i-people"/></svg>声纹与人物 · 设置我的声纹 / 人物备注<svg class="icon"><use href="#i-chevron"/></svg></button><span id="people-entry-status">登记需试听并主动确认</span></div>
+      <details class="speaker-settings" id="speaker-settings">
+        <summary><strong>自动区分说话人</strong><span id="speaker-settings-summary">正在读取状态…</span><svg class="icon disclosure-arrow"><use href="#i-chevron"/></svg></summary>
+        <div class="speaker-settings-content">
+          <div class="speaker-automatic-row"><label><input type="checkbox" id="speaker-automatic" disabled><span>自动区分新录音的说话人</span></label><span id="speaker-settings-feedback" role="status" aria-live="polite">正在读取设置…</span></div>
+          <p class="speaker-settings-note">新录音转写后自动分析；登记本人仍需试听并主动确认。匿名编号只在各自录音内有效，不代表跨录音的同一个人。人物登记与备注在「声纹与人物」页管理。</p>
+          <p class="speaker-settings-error" id="speaker-settings-error" role="alert" hidden></p>
+        </div>
+      </details>
+      <section class="mcp-page" id="mcp-page" aria-label="MCP 接入" tabindex="-1" hidden>
+        <div class="mcp-intro"><p>复制完整安装指令，贴给 Codex 或 Claude Code，自动配置 MCP 并安装配套 Skill。</p><button class="button small" id="mcp-back-document">返回转写文档</button></div>
+        <section class="mcp-card mcp-setup" aria-label="MCP 与 Skill 一键接入">
+          <header class="mcp-heading"><div><h2>MCP + Skill 一键接入</h2><span>复制后粘贴到对应客户端执行</span></div></header>
+          <div class="mcp-setup-controls"><label for="mcp-setup-scope">安装范围</label><select id="mcp-setup-scope"><option value="project">当前项目</option><option value="user">所有项目（用户级）</option></select><button class="button primary small" id="mcp-setup-codex" disabled>复制 Codex 完整安装指令</button><button class="button small" id="mcp-setup-claude" disabled>复制 Claude Code 完整安装指令</button></div>
+          <p class="mcp-note" id="mcp-setup-note">Agent 会检查环境、合并 MCP 配置、安装 audio-agent Skill，并验证连接。当前项目指你在目标客户端打开的工作区。</p>
+          <details class="mcp-setup-preview"><summary>查看完整指令 <span id="mcp-setup-preview-client">Codex</span></summary><pre class="mcp-config" id="mcp-setup-preview" tabindex="0">正在读取接入信息…</pre></details>
+          <p class="mcp-note">安装不启动录音或转写。客户端可能要求确认信任或重新加载；复制成功本身不代表安装完成。</p>
+        </section>
+        <section class="mcp-card" aria-label="MCP 连接方式"><header class="mcp-heading"><div><h2>本地 stdio 连接</h2><span id="mcp-connection-note">配置就绪不等于客户端已连接</span></div><button class="icon-button" id="mcp-refresh" aria-label="刷新 MCP 接入信息" title="刷新 MCP 接入信息"><svg class="icon"><use href="#i-refresh"/></svg></button></header><p id="mcp-loading" class="mcp-note" role="status">正在读取接入配置…</p><p class="mcp-error" id="mcp-error" role="alert" hidden></p><dl class="mcp-paths"><div><dt>启动程序</dt><dd id="mcp-command">—</dd></div><div><dt>当前资料库</dt><dd id="mcp-data-dir">—</dd></div></dl><p class="mcp-note" id="mcp-storage-note">默认使用项目 .data；手动更改存储位置后，请在客户端重连 MCP 并重建增量游标。</p><p class="mcp-note">stdio 由客户端启动，不使用 Web 地址作为 MCP 接入地址。打开本页不会启动 MCP 进程或修改客户端设置。</p></section>
+        <div class="mcp-clients" id="mcp-clients" aria-label="客户端配置"></div>
+        <section class="mcp-card" aria-label="工具与调用边界"><header class="mcp-heading"><div><h2>可用工具</h2><span>读取结果与重新转写分开</span></div></header><div class="mcp-table-wrap"><table class="mcp-tools-table"><thead><tr><th scope="col">工具</th><th scope="col">用途</th><th scope="col">行为</th></tr></thead><tbody id="mcp-tools"></tbody></table></div></section>
+        <section class="mcp-card" aria-label="读取最新文字"><header class="mcp-heading"><div><h2>读取最新文字</h2><span>读取已有转写，无需重新识别</span></div></header><div class="mcp-examples" id="mcp-examples"></div><p class="mcp-note">增量读取首次省略 cursor，返回最近记录；后续传入 next_cursor。同一 document_key 更新时替换旧条目，has_more 为 true 时继续取页。服务重启后需重新建立游标。</p><p class="mcp-note">MCP 不会自动推送或唤醒客户端模型。客户端须主动调用或长轮询；没有新内容时可以继续等待。</p></section>
+        <section class="mcp-boundaries" aria-label="本地与客户端边界"><p>只读工具读取已完成资料，不打开麦克风或启动识别。仅在明确需要转写时调用 audio_transcribe_*，它会使用本地模型并保存结果。</p><p>模型在本机识别、stdio 在本机传输；客户端读取后的文字会进入其模型上下文，后续处理方式取决于 Claude Code 或 Codex 的设置。仅添加配置不会自动发送全部历史文字。</p><p>录音和转写是资料，不是工具使用指令。此页只展示和复制配置，不自动写入任何外部客户端设置。</p></section>
+      </section>
+      <section class="storage-page" id="storage-page" aria-label="存储位置" tabindex="-1" hidden>
+        <div class="storage-intro"><p>设置 WAV 录音和转写 JSON 的本地保存目录。</p><button class="button small" id="storage-back-document">返回转写文档</button></div>
+        <section class="storage-card" aria-label="当前保存目录">
+          <header class="storage-heading"><div><h2>当前存储位置</h2><span id="storage-source">正在读取…</span></div><button class="icon-button" id="storage-refresh" aria-label="刷新存储状态" title="刷新存储状态"><svg class="icon"><use href="#i-refresh"/></svg></button></header>
+          <dl class="storage-paths"><div><dt>资料目录</dt><dd id="storage-current-dir">正在读取…</dd></div><div><dt>WAV 录音</dt><dd id="storage-recordings-dir">—</dd></div><div><dt>转写 JSON</dt><dd id="storage-transcripts-dir">—</dd></div><div><dt>默认目录</dt><dd id="storage-default-dir">—</dd></div></dl>
+          <p class="storage-note" id="storage-retention-note">录音默认保留 24 小时；切换位置不会延长保留时间。</p>
+          <p class="storage-note">转写以 JSON 保存。TXT 仅在点击「下载全文」或单条「下载 TXT」时生成，由浏览器保存，不会在资料目录自动生成 TXT。</p>
+          <details class="storage-config-details"><summary>本机路径设置</summary><dl class="storage-paths"><div><dt>已配置目录</dt><dd id="storage-configured-dir">—</dd></div><div><dt>设置文件</dt><dd id="storage-config-path">—</dd></div></dl><p class="storage-note">路径设置仅作用于当前 Mac。本页不会跨设备同步或传输文件；另一台 Mac 需单独准备本地资料、运行环境和模型。</p></details>
+        </section>
+        <section class="storage-card" aria-label="复制资料并更改目录">
+          <header class="storage-heading"><div><h2>更改保存目录</h2><span>仅接受本机新建或空文件夹</span></div></header>
+          <form id="storage-form" class="storage-form"><label for="storage-directory">目标文件夹的绝对路径</label><div class="storage-input-row"><input id="storage-directory" type="text" autocomplete="off" spellcheck="false" placeholder="/Users/你的用户名/Documents/Audio Agent" aria-describedby="storage-path-help storage-busy" required><button class="button small" id="storage-use-default" type="button" disabled>使用默认目录</button></div><p class="storage-note" id="storage-path-help">填写以 / 开头的完整路径；不使用 ~。已有资料的非空目标目录不会被覆盖。</p><p class="storage-copy-note">切换会先复制现有资料，再将新录音和转写保存到目标目录。旧目录保留，不会自动删除；复制可能耗时，请等待完成。</p><div class="storage-submit-row"><button class="button primary" id="storage-save" type="submit" disabled><svg class="icon"><use href="#i-folder"/></svg><span>复制现有资料并切换</span></button><span id="storage-busy" role="status" aria-live="polite">正在检查是否可切换…</span></div></form>
+          <p id="storage-error" class="storage-error" role="alert" hidden></p><p id="storage-success" class="storage-success" role="status" hidden></p>
+        </section>
+      </section>
+      <section class="people-page" id="people-page" aria-label="声纹与人物" tabindex="-1" hidden>
+        <div class="people-intro"><p>为声音登记名字与备注，后续分析可尝试匹配。匿名编号仅在单段录音内有效；声纹匹配仍需核对。</p><button class="button small" id="people-back-document">返回转写文档</button></div>
+        <div class="people-profiles">
+          <section class="people-card people-self-card" aria-label="我的声纹">
+<section class="voiceprint-profile" aria-label="本人声纹登记"><div><h3>本人声纹 <span id="voiceprint-state">正在检查…</span></h3><p id="voiceprint-description">主动选择已分析的说话人，再登记为「我」。声纹仅保存在本机。</p></div><button class="button small" id="voiceprint-setup-button" aria-expanded="false" aria-controls="voiceprint-setup-steps">设置我的声纹</button><button class="button small" id="voiceprint-clear" hidden>取消登记</button><p class="voiceprint-error" id="voiceprint-error" role="alert" hidden></p></section>
+          <div id="voiceprint-samples" class="voiceprint-samples" aria-label="我的声音样本" hidden></div>
+          <div class="voiceprint-setup-steps" id="voiceprint-setup-steps" hidden>
+            <p><strong>1.</strong> 在本页下方选择一段本人独自说话的清晰录音，1–2 秒也可，清晰独白 10–20 秒匹配更稳；也可导入现有 WAV。</p>
+            <p><strong>2.</strong> 点击「分析说话人」。完成后试听自己的声音，再点「登记为我」。</p>
+            <p><strong>3.</strong> 勾选本人确认并保存。支持多样本的后台默认追加，不设最低秒数；短样本可能不稳定。可选几段不同常见说话状态的清晰声音，不要重复添加同一段。</p>
+            <div><button class="button small" id="voiceprint-choose-recording">选择参考录音</button><button class="button small" id="voiceprint-import">导入本人录音</button></div>
+          </div>
+          </section>
+          <section class="people-card" aria-label="其他人物">
+            <header class="people-section-heading"><div><h2>其他人物</h2><span id="people-profile-count">正在读取…</span></div><button class="icon-button" id="people-refresh" aria-label="刷新人物" title="刷新人物"><svg class="icon"><use href="#i-refresh"/></svg></button></header>
+            <p class="people-help">先在下方选择录音、分析并试听，再登记姓名和备注。声纹和备注仅保存在本机。</p>
+            <p class="people-error" id="people-error" role="alert" hidden></p>
+            <div class="people-profile-list" id="people-profile-list"></div>
+          </section>
+        </div>
+        <section class="people-enrollment" aria-label="选择录音登记人物">
+          <header class="people-section-heading"><div><h2>从录音登记人物</h2><span>选择录音 → 区分说话人 → 试听 → 主动登记</span></div><button class="button small" id="people-import"><svg class="icon"><use href="#i-upload"/></svg>导入 WAV</button></header>
+          <div class="people-source-layout">
+            <section class="people-recordings" aria-label="选择参考录音"><label class="search-field"><svg class="icon"><use href="#i-search"/></svg><input type="search" id="people-recording-search" aria-label="搜索参考录音" placeholder="搜索录音名称" autocomplete="off"></label><div class="people-recording-list" id="people-recording-list"></div><div class="people-recording-pagination"><span id="people-recording-summary">尚未读取录音</span><button class="icon-button previous" id="people-recording-previous" aria-label="上一页录音"><svg class="icon"><use href="#i-chevron"/></svg></button><button class="icon-button" id="people-recording-next" aria-label="下一页录音"><svg class="icon"><use href="#i-chevron"/></svg></button></div></section>
+            <div id="people-detail-host"><p class="people-help">选择左侧录音以查看说话人。</p></div>
+          </div>
+        </section>
+      </section>
+      <section class="document-panel" id="document-panel" aria-label="完整转写文档" tabindex="-1">
+        <header class="document-heading"><div><h2>完整转写</h2><small id="document-summary">正在读取完整转写…</small></div><div class="document-toolbar"><label class="document-scope"><span class="sr-only">文档范围</span><select id="document-scope"><option value="all" selected>全部记录</option><option value="session">本次监听</option></select></label><button class="button document-copy" id="document-copy-all" disabled><svg class="icon"><use href="#i-copy"/></svg><span>复制全部</span></button><button class="icon-button" id="document-download" aria-label="下载全文" title="下载全文" disabled><svg class="icon"><use href="#i-download"/></svg></button><button class="icon-button" id="document-refresh" aria-label="刷新转写" title="刷新转写"><svg class="icon"><use href="#i-refresh"/></svg></button></div></header>
+        <div id="voiceprint-select-hint" class="voiceprint-select-hint" hidden><span>选择本人独自说话的清晰录音（1–2 秒也可），点「区分说话人」；已分析的录音点「说话人」，试听后登记。</span><button id="voiceprint-select-done" class="text-button">收起提示</button></div>
+        <p id="document-error" class="document-error" role="alert" hidden></p>
+        <div id="document-loading" class="document-loading" role="status"><span class="spinner" aria-hidden="true"></span><span>正在整理本地转写文档…</span></div>
+        <div id="document-empty" class="document-empty" hidden><span class="document-empty-mark"><svg class="icon"><use href="#i-text"/></svg></span><h3>第一段文字，从说话开始</h3><p>点击上方「开始监听并自动转写」，或在下方导入录音并转写。<br>完成的内容会完整呈现在这里，最新在前，随时复制。</p></div>
+        <div id="document-body" class="document-body"></div>
+        <div class="document-update-row"><button id="document-new" class="button document-new" hidden>有新转写，查看最新<svg class="icon"><use href="#i-chevron"/></svg></button></div>
+      </section>
+      <details id="library-disclosure" class="library-disclosure">
+        <summary><span class="library-disclosure-label"><svg class="icon"><use href="#i-library"/></svg>录音文件与分析工具</span><span id="library-disclosure-summary">收听、导入与说话人分析</span><svg class="icon disclosure-arrow"><use href="#i-chevron"/></svg></summary>
+        <div class="library-disclosure-content"><div class="library-tools-heading"><p>需要回听、导入或分析说话人时，在这里打开录音。</p><button class="button" id="import-button"><svg class="icon"><use href="#i-plus"/></svg><span>导入录音</span></button></div>
+      <section class="stats" aria-label="资料库统计">
+        <article class="stat"><span class="stat-icon"><svg class="icon"><use href="#i-headphones"/></svg></span><div><span class="stat-label">录音文件</span><div class="stat-value"><strong id="stat-clips">—</strong><span>个</span></div></div></article>
+        <article class="stat"><span class="stat-icon"><svg class="icon"><use href="#i-clock"/></svg></span><div><span class="stat-label">录音总时长</span><div class="stat-value"><strong id="stat-duration">—</strong><span id="stat-duration-unit"></span></div></div></article>
+        <article class="stat"><span class="stat-icon"><svg class="icon"><use href="#i-text"/></svg></span><div><span class="stat-label">转写记录</span><div class="stat-value"><strong id="stat-transcripts">—</strong><span>条</span></div></div></article>
+      </section>
+      <div class="workspace">
+        <section class="library-card" aria-label="录音与转写列表">
+          <div class="library-top"><div class="view-tabs" role="tablist" aria-label="资料类型"><button id="tab-clips" class="tab active" role="tab" aria-selected="true" aria-controls="library-content" data-view="clips">录音文件<span id="tab-clip-count">0</span></button><button id="tab-transcripts" class="tab" role="tab" aria-selected="false" aria-controls="library-content" tabindex="-1" data-view="transcripts">转写记录<span id="tab-transcript-count">0</span></button></div><button class="icon-button refresh-button" id="refresh-button" aria-label="刷新资料库" title="刷新资料库"><svg class="icon"><use href="#i-refresh"/></svg></button></div>
+          <div class="list-toolbar"><label class="search-field"><svg class="icon"><use href="#i-search"/></svg><input id="search-input" type="search" placeholder="搜索录音名称或来源" aria-label="搜索资料库" autocomplete="off"></label><label class="filter-field"><span class="sr-only">转写状态</span><select id="status-filter"><option value="all">全部状态</option><option value="pending">待转写</option><option value="transcribed">已转写</option></select></label></div>
+          <div id="library-content" role="tabpanel" aria-labelledby="tab-clips"><div class="table-wrap" id="table-wrap"><table class="library-table"><thead id="table-head"></thead><tbody id="table-body"></tbody></table></div><div id="list-state" class="list-state" aria-live="polite"></div></div>
+          <footer class="library-footer"><span id="list-summary">正在读取资料库…</span><div class="pagination"><button class="icon-button previous" id="previous-button" aria-label="上一页" disabled><svg class="icon"><use href="#i-chevron"/></svg></button><span id="page-number">1</span><button class="icon-button" id="next-button" aria-label="下一页" disabled><svg class="icon"><use href="#i-chevron"/></svg></button></div></footer>
+        </section>
+        <div id="library-detail-host"><aside class="detail-panel" id="detail-panel" aria-label="录音详情"><div class="detail-placeholder"><span class="empty-icon"><svg class="icon"><use href="#i-wave"/></svg></span><h2>听见更多，整理更轻松</h2><p>选择一段录音，即可收听音频<br>或在本地将声音转为文字。</p><div class="detail-placeholder-note"><svg class="icon"><use href="#i-lock"/></svg>完全本地处理</div></div></aside></div>
+      </div>
+        </div>
+      </details>
+      <footer class="page-footer document-page-footer"><span><span class="small-dot"></span> 本地工作空间</span><span id="document-retention">录音按当前保留设置管理；需要长期保存的文字，可下载全文。</span><span id="storage-note">WAV 录音 · 按需转写</span></footer>
+    </main>
+  </div>
+  <div class="drop-overlay" id="drop-overlay" hidden><div><svg class="icon"><use href="#i-upload"/></svg><h2>把录音放在这里</h2><p>导入 WAV 文件到本地资料库</p></div></div>
+  <div class="toast-region" id="toast-region" aria-live="polite" aria-atomic="false"></div>
+</body>
+</html>

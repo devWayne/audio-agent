@@ -1,0 +1,68 @@
+#!/usr/bin/env python3
+"""Bounded stdio smoke check: never read transcripts or run ASR/capture."""
+import argparse
+import asyncio
+from datetime import timedelta
+import json
+import os
+from pathlib import Path
+import sys
+
+from mcp import ClientSession, StdioServerParameters
+from mcp.client.stdio import stdio_client
+
+
+EXPECTED_TOOLS = {
+    "audio_status", "audio_list_clips", "audio_transcribe_recent",
+    "audio_transcribe_clip", "audio_recent_transcripts", "audio_get_updates",
+}
+
+
+async def check(data_dir, timeout):
+    project = Path(__file__).resolve().parents[1]
+    arguments = ["-m", "audio_agent"]
+    if data_dir is not None:
+        arguments += ["--data-dir", str(Path(data_dir).expanduser().absolute())]
+    arguments.append("mcp")
+    # The MCP SDK's default child environment omits these application settings.
+    # Forward only what this read-only probe needs, not arbitrary credentials.
+    environment = {key: os.environ[key] for key in
+                   ("AUDIO_AGENT_DATA_DIR", "AUDIO_AGENT_FFMPEG", "XDG_CONFIG_HOME") if key in os.environ}
+    params = StdioServerParameters(command=sys.executable, args=arguments, cwd=str(project), env=environment)
+    async with stdio_client(params) as (read, write):
+        async with ClientSession(read, write, read_timeout_seconds=timedelta(seconds=timeout)) as session:
+            await session.initialize()
+            names = {tool.name for tool in (await session.list_tools()).tools}
+            if names != EXPECTED_TOOLS:
+                raise RuntimeError(f"工具集合不匹配：{sorted(names)}")
+            result = await session.call_tool("audio_status", {})
+            if result.isError:
+                raise RuntimeError("audio_status 返回错误；请检查本地服务日志和资料库设置。")
+            status = result.structuredContent or json.loads(result.content[0].text)
+            storage, capture = status["storage"], status["capture"]
+            return {
+                "status": "stdio_probe_passed", "client_connection": "not_checked",
+                "skill_discovery": "not_checked", "tools": sorted(names),
+                "data_dir": storage["root"], "clip_count": storage["clip_count"],
+                "capture_active": capture["active"],
+                "note": "仅验证后端协议；还需在目标客户端确认加载 MCP 和 audio-agent Skill。",
+            }
+
+
+def main():
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--data-dir", help="可选：固定检查的本地资料库；默认跟随本机设置")
+    parser.add_argument("--timeout", type=int, default=20, choices=range(1, 121), metavar="1..120")
+    args = parser.parse_args()
+    try:
+        result = asyncio.run(asyncio.wait_for(check(args.data_dir, args.timeout), args.timeout))
+    except Exception as exc:
+        print(json.dumps({"status": "failed", "error": str(exc),
+                          "note": "检查依赖、ffmpeg、资料库权限和 stderr；未证明客户端已连接。"}, ensure_ascii=False))
+        return 1
+    print(json.dumps(result, ensure_ascii=False, indent=2))
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Audio Agent"
+  short_description: "Read local transcripts and transcribe audio on request"
+  default_prompt: "使用 $audio-agent 读取已完成的本地转写，保留时间和说话人标签。"

@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "audio-agent": {
+      "command": "/absolute/path/to/audio-agent/.venv/bin/python",
+      "args": ["-m", "audio_agent", "mcp"]
+    }
+  }
+}

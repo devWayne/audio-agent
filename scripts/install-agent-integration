@@ -1,0 +1,10 @@
+#!/usr/bin/env python3
+"""Run with this checkout's .venv/bin/python; workspace defaults to caller cwd."""
+from pathlib import Path
+import sys
+
+# The server and skill belong to this script's checkout, never the target cwd.
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
+from audio_agent.agent_install import main
+
+raise SystemExit(main())
